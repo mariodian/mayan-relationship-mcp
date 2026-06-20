@@ -6,9 +6,6 @@ MCP server that fetches Mayan zodiac signs and generates relationship compatibil
 
 [Report Bug](https://github.com/mariodian/mayan-relationship-mcp/issues/new?template=bug-report.md) · [Request Feature](https://github.com/mariodian/mayan-relationship-mcp/issues/new?template=feature-request.md)
 
-[![Version](https://img.shields.io/github/v/release/mariodian/mayan-relationship-mcp)](https://github.com/mariodian/mayan-relationship-mcp/releases)
-[![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
-
 </div>
 
 ## ⚡ Quick Start
