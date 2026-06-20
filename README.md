@@ -1,4 +1,5 @@
 <div align="center">
+<img width="128" height="128" alt="Mayan Relationship MCP Logo" src="media/logo.webp" />
 <h1>Mayan Relationship MCP</h1>
 
 MCP server that fetches Mayan zodiac signs and generates relationship compatibility analyses. Deployed on Cloudflare Workers.
