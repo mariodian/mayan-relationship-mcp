@@ -50,20 +50,20 @@ export function createServer(): McpServer {
     "analyze_relationship",
     {
       description: "Analyze the Mayan zodiac relationship compatibility between two people. Fetches both Mayan signs and returns a complete analysis prompt that the LLM uses to generate the relationship reading.",
-      inputSchema: { male_birthday: z.string(), female_birthday: z.string() },
+      inputSchema: { birthday1: z.string(), gender1: z.string(), birthday2: z.string(), gender2: z.string() },
     },
-    async ({ male_birthday, female_birthday }) => {
+    async ({ birthday1, gender1, birthday2, gender2 }) => {
       try {
-        const maleSign = await fetchMayanSign(male_birthday);
-        const femaleSign = await fetchMayanSign(female_birthday);
+        const sign1 = await fetchMayanSign(birthday1);
+        const sign2 = await fetchMayanSign(birthday2);
 
         const prompt = `Calculate mayan calendar horoscope
 
-male's birthday is ${male_birthday}
-female's birthday is ${female_birthday}
+${gender1}'s birthday is ${birthday1}
+${gender2}'s birthday is ${birthday2}
 
-Male's Mayan sign: ${maleSign.day_sign} (Tone ${maleSign.tone}, Trecana: ${maleSign.trecana_sign})
-Female's Mayan sign: ${femaleSign.day_sign} (Tone ${femaleSign.tone}, Trecana: ${femaleSign.trecana_sign})
+${gender1}'s Mayan sign: ${sign1.day_sign} (Tone ${sign1.tone}, Trecana: ${sign1.trecana_sign})
+${gender2}'s Mayan sign: ${sign2.day_sign} (Tone ${sign2.tone}, Trecana: ${sign2.trecana_sign})
 
 Do a complete analysis of this relationship from all possible angles.`;
 

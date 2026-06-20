@@ -87,7 +87,7 @@ Add to your `.cursor/mcp.json`:
 
 </details>
 
-Reload your assistant and try: _"Analyze the Mayan relationship compatibility between male born on January 1, 1990 and female born on May 15, 1992"_
+Reload your assistant and try: _"Analyze the Mayan relationship compatibility between a male born on January 1, 1990 and a female born on May 15, 1992"_
 
 ## 📋 Table of Contents
 
@@ -218,7 +218,7 @@ Fetches the Mayan zodiac profile for a single birthday.
 
 Fetches both Mayan signs and returns a complete analysis prompt for the LLM.
 
-- **Input:** `male_birthday` (e.g., `"January 1, 1990"`), `female_birthday` (e.g., `"May 15, 1992"`)
+- **Input:** `birthday1` (e.g., `"January 1, 1990"`), `gender1` (e.g., `"Male"`), `birthday2` (e.g., `"May 15, 1992"`), `gender2` (e.g., `"Female"`)
 - **Output:** Structured prompt with both Mayan profiles ready for relationship analysis
 
 ```
