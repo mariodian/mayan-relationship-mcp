@@ -218,12 +218,26 @@ Fetches the Mayan zodiac profile for a single birthday.
 
 Fetches both Mayan signs and returns a complete analysis prompt for the LLM.
 
-- **Input:** `birthday1` (e.g., `"January 1, 1990"`), `gender1` (e.g., `"Male"`), `birthday2` (e.g., `"May 15, 1992"`), `gender2` (e.g., `"Female"`)
+- **Input:** `birthday1` (e.g., `"January 1, 1990"`), `gender1` (`"male"` or `"female"`), `birthday2` (e.g., `"May 15, 1992"`), `gender2` (`"male"` or `"female"`)
 - **Output:** Structured prompt with both Mayan profiles ready for relationship analysis
 
 ```
 Male's Mayan sign: Dog (Tone 12, Trecana: Storm)
 Female's Mayan sign: Eagle (Tone 6, Trecana: Dog)
+```
+
+### `analyze_group`
+
+Fetches all Mayan signs and returns a complete analysis prompt for group dynamics among 3–10 people.
+
+- **Input:** `people` — array of objects with `birthday` (string) and `gender` (`"male"` or `"female"`)
+- **Output:** Structured prompt listing all group members and their Mayan profiles
+
+```
+Group members:
+1. Male born on January 1, 1990 — Mayan sign: Dog (Tone 12, Trecana: Storm)
+2. Female born on May 15, 1992 — Mayan sign: Eagle (Tone 6, Trecana: Dog)
+3. Male born on August 8, 1995 — Mayan sign: Monkey (Tone 4, Trecana: Seed)
 ```
 
 ## 📁 Project Structure
