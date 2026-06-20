@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "mayan-relationship": {
+      "command": "bun",
+      "args": ["run", "/absolute/path/to/mayan-relationship-mcp/dist/stdio.js"]
+    }
+  }
+}

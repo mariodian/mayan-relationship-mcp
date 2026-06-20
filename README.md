@@ -37,12 +37,71 @@ Female's Mayan sign: Eagle (Tone 6, Trecana: Dog)
 
 Try: *"Analyze the Mayan relationship compatibility between male born on January 1, 1990 and female born on May 15, 1992"*
 
-## Development
-
-### Prerequisites
+## Prerequisites
 
 - [Bun](https://bun.sh/) installed
-- [Cloudflare account](https://dash.cloudflare.com/) for deployment
+- [Cloudflare account](https://dash.cloudflare.com/) for deployment (HTTP mode only)
+
+## Local Usage (stdio)
+
+Run the MCP server locally via stdio transport for use with Claude Desktop, Cursor, or other MCP clients:
+
+```bash
+bun run mcp
+```
+
+Or directly:
+
+```bash
+bun run dist/stdio.js
+```
+
+### opencode Configuration (Local)
+
+Add to your `opencode.json` or `opencode.jsonc`:
+
+```json
+{
+  "mcpServers": {
+    "mayan-relationship": {
+      "type": "local",
+      "command": ["mayan-relationship-mcp"]
+    }
+  }
+}
+```
+
+This requires the package to be installed globally or available in your PATH. If installed locally, use the full path:
+
+```json
+{
+  "mcpServers": {
+    "mayan-relationship": {
+      "type": "local",
+      "command": ["bun", "run", "/absolute/path/to/mayan-relationship-mcp/dist/stdio.js"]
+    }
+  }
+}
+```
+
+### Claude Desktop / Cursor Configuration
+
+Add to your MCP config file (e.g., `~/Library/Application Support/Claude/claude_desktop_config.json`):
+
+```json
+{
+  "mcpServers": {
+    "mayan-relationship": {
+      "command": "bun",
+      "args": ["run", "/absolute/path/to/mayan-relationship-mcp/dist/stdio.js"]
+    }
+  }
+}
+```
+
+A sample `mcp.json` is included in the repo root.
+
+## Cloudflare Workers Deployment (HTTP/SSE)
 
 ### Local development
 
@@ -68,9 +127,7 @@ The server will be deployed to your `workers.dev` subdomain at:
 https://mayan-relationship-mcp.<your-subdomain>.workers.dev/mcp
 ```
 
-## Configuration
-
-### opencode
+### opencode Configuration (Remote)
 
 Add to your `opencode.json` or `opencode.jsonc`:
 
@@ -78,20 +135,7 @@ Add to your `opencode.json` or `opencode.jsonc`:
 {
   "mcpServers": {
     "mayan-relationship": {
-      "url": "https://mayan-relationship-mcp.<your-subdomain>.workers.dev/mcp"
-    }
-  }
-}
-```
-
-### Claude Desktop / Cursor / Perplexity
-
-Add to your MCP config file:
-
-```json
-{
-  "mcpServers": {
-    "mayan-relationship": {
+      "type": "remote",
       "url": "https://mayan-relationship-mcp.<your-subdomain>.workers.dev/mcp"
     }
   }
@@ -122,9 +166,12 @@ The server accepts dates in multiple formats:
 ```
 mayan-relationship-mcp/
 ├── src/
-│   ├── index.ts      # Worker entry point + MCP server
+│   ├── server.ts     # Shared MCP server factory (transport-agnostic)
+│   ├── index.ts      # Cloudflare Workers entry point (HTTP/SSE)
+│   ├── stdio.ts      # Local stdio entry point
 │   ├── client.ts     # Date parsing + HTTP fetch
 │   └── parser.ts     # HTML parsing
+├── mcp.json          # Sample Claude Desktop config
 ├── package.json
 ├── tsconfig.json
 ├── wrangler.toml

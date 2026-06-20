@@ -3,10 +3,14 @@
   "version": "0.1.0",
   "description": "MCP server for Mayan zodiac relationship compatibility analysis",
   "type": "module",
+  "bin": {
+    "mayan-relationship-mcp": "./dist/stdio.js"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
+    "mcp": "bun run dist/stdio.js",
     "test": "bun test"
   },
   "dependencies": {
@@ -18,6 +22,7 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250620.0",
     "@types/bun": "^1.3.14",
+    "@types/node": "^26.0.0",
     "typescript": "^5.7.0",
     "wrangler": "^4.0.0"
   }
