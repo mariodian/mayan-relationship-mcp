@@ -1,6 +1,10 @@
+import { createRequire } from "module";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { fetchMayanSign } from "./client";
+
+const require = createRequire(import.meta.url);
+const pkg = require("../package.json") as { name: string; version: string };
 
 const MAX_GROUP_SIZE = 10;
 
@@ -10,8 +14,8 @@ function formatGender(gender: string): string {
 
 export function createServer(): McpServer {
   const server = new McpServer({
-    name: "mayan-relationship",
-    version: "0.1.0",
+    name: pkg.name,
+    version: pkg.version,
   });
 
   server.registerTool(
