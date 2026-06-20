@@ -1,0 +1,7 @@
+name = "mayan-relationship-mcp"
+main = "dist/index.js"
+compatibility_date = "2025-06-20"
+compatibility_flags = ["nodejs_compat"]
+
+[build]
+command = "bun run build"
