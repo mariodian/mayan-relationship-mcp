@@ -94,11 +94,8 @@ Reload your assistant and try: _"Analyze the Mayan relationship compatibility be
 - ⚡ [Quick Start](#-quick-start)
 - 🤔 [Why Mayan Relationship MCP?](#-why-mayan-relationship-mcp)
 - ✨ [Features](#-features)
-- 📥 [Installation](#-installation)
-- 🚀 [Usage](#-usage)
 - 🔧 [Tools](#-tools)
-- 📁 [Project Structure](#-project-structure)
-- ⚠️ [Security](#%EF%B8%8F-security)
+- 💡 [Example Prompts](#-example-prompts)
 - 💬 [Contributing](#-contributing)
 - 📜 [License](#-license)
 - 📌 [Credits](#-credits)
@@ -110,92 +107,11 @@ The Mayan zodiac offers a unique system of day signs, galactic tones, and trecan
 ## ✨ Features
 
 - **Zodiac lookup**: fetch Mayan day sign, galactic tone, and trecana sign from any birthday
-- **Relationship analysis**: generate structured compatibility prompts for two people
+- **Relationship analysis**: generate structured compatibility prompts for two people or groups
+- **Multiple relationship contexts**: romantic, friendship, colleagues, family, business, classmates, or general
 - **Flexible date parsing**: accepts "January 1, 1990", "1990-01-01", "01/01/1990", "19900101"
 - **Dual transport**: local stdio for desktop clients, remote HTTP/SSE via Cloudflare Workers
 - **Zero API keys**: no authentication required for the hosted remote server
-
-## 📥 Installation
-
-### Prerequisites
-
-- [Bun](https://bun.sh/) v1.0+
-- [Cloudflare account](https://dash.cloudflare.com/) (for deployment only)
-
-### From source
-
-```bash
-git clone https://github.com/mariodian/mayan-relationship-mcp.git
-cd mayan-relationship-mcp
-bun install
-bun run build
-```
-
-## 🚀 Usage
-
-### Local (stdio)
-
-```bash
-bun run mcp
-```
-
-Or directly:
-
-```bash
-bun run dist/stdio.js
-```
-
-### Local stdio config
-
-```json
-{
-  "mcpServers": {
-    "mayan-relationship": {
-      "type": "local",
-      "command": ["mayan-relationship-mcp"]
-    }
-  }
-}
-```
-
-If installed locally, use the full path:
-
-```json
-{
-  "mcpServers": {
-    "mayan-relationship": {
-      "type": "local",
-      "command": [
-        "bun",
-        "run",
-        "/absolute/path/to/mayan-relationship-mcp/dist/stdio.js"
-      ]
-    }
-  }
-}
-```
-
-### Cloudflare Workers (HTTP/SSE)
-
-```bash
-bun install
-bun run build
-bunx wrangler deploy
-```
-
-The server will be deployed to:
-
-```
-https://mayan-relationship-mcp.<your-subdomain>.workers.dev/mcp
-```
-
-### Testing with MCP Inspector
-
-```bash
-npx @modelcontextprotocol/inspector@latest
-```
-
-Then enter `http://localhost:8788/mcp` as the server URL.
 
 ## 🔧 Tools
 
@@ -218,54 +134,70 @@ Fetches the Mayan zodiac profile for a single birthday.
 
 Fetches both Mayan signs and returns a complete analysis prompt for the LLM.
 
-- **Input:** `birthday1` (e.g., `"January 1, 1990"`), `gender1` (`"male"` or `"female"`), `birthday2` (e.g., `"May 15, 1992"`), `gender2` (`"male"` or `"female"`)
-- **Output:** Structured prompt with both Mayan profiles ready for relationship analysis
-
-```
-Male's Mayan sign: Dog (Tone 12, Trecana: Storm)
-Female's Mayan sign: Eagle (Tone 6, Trecana: Dog)
-```
+- **Input:**
+  - `birthday1` (e.g., `"January 1, 1990"`)
+  - `gender1` (`"male"` or `"female"`)
+  - `birthday2` (e.g., `"May 15, 1992"`)
+  - `gender2` (`"male"` or `"female"`)
+  - `analysis_type` (optional, default: `"romantic"`) — one of: `"romantic"`, `"friendship"`, `"colleagues"`, `"family"`, `"business"`, `"classmates"`, `"general"`
+- **Output:** Structured markdown prompt with both Mayan profiles ready for relationship analysis
 
 ### `analyze_group`
 
 Fetches all Mayan signs and returns a complete analysis prompt for group dynamics among 3–10 people.
 
-- **Input:** `people` — array of objects with `birthday` (string) and `gender` (`"male"` or `"female"`)
-- **Output:** Structured prompt listing all group members and their Mayan profiles
+- **Input:**
+  - `people` — array of objects with `birthday` (string) and `gender` (`"male"` or `"female"`)
+  - `analysis_type` (optional, default: `"family"`) — one of: `"romantic"`, `"friendship"`, `"colleagues"`, `"family"`, `"business"`, `"classmates"`, `"general"`
+- **Output:** Structured markdown prompt listing all group members and their Mayan profiles
 
-```
-Group members:
-1. Male born on January 1, 1990 — Mayan sign: Dog (Tone 12, Trecana: Storm)
-2. Female born on May 15, 1992 — Mayan sign: Eagle (Tone 6, Trecana: Dog)
-3. Male born on August 8, 1995 — Mayan sign: Monkey (Tone 4, Trecana: Seed)
-```
+## 💡 Example Prompts
 
-## 📁 Project Structure
+Here are some prompts you can try with your AI assistant:
 
-```
-mayan-relationship-mcp/
-├── src/
-│   ├── server.ts     # Shared MCP server factory (transport-agnostic)
-│   ├── index.ts      # Cloudflare Workers entry point (HTTP/SSE)
-│   ├── stdio.ts      # Local stdio entry point
-│   ├── client.ts     # Date parsing + HTTP fetch
-│   └── parser.ts     # HTML parsing
-├── mcp.json          # Sample Claude Desktop config
-├── package.json
-├── tsconfig.json
-├── wrangler.toml
-└── README.md
-```
+### Zodiac Lookup
+- "What is my Mayan sign if I was born on January 15, 1985?"
+- "Get the Mayan zodiac profile for March 22, 1990"
 
-## ⚠️ Security
+### Relationship Analysis (Romantic)
+- "Analyze the Mayan relationship compatibility between a male born on January 1, 1990 and a female born on May 15, 1992"
+- "Give me a romantic compatibility reading for two people: male born 1985-03-22 and female born 1987-07-14"
 
-- **Tool-call approval**: most MCP clients ask you to manually accept each tool call before they run. Keep this setting enabled and review tool-call details before executing.
-- **No sensitive data**: this server reads public zodiac data from mymayansign.com. No secrets, tokens, or personal data are stored or transmitted.
-- **Self-hosting**: if you deploy your own instance, you control the transport and can restrict access as needed.
+### Relationship Analysis (Friendship)
+- "Analyze the Mayan friendship compatibility between a male born on June 10, 1988 and a female born on September 3, 1990"
+- "What's the friendship dynamic between these two Mayan signs? Male born 19900101 and female born 19920515"
+
+### Relationship Analysis (Colleagues)
+- "Analyze the workplace compatibility between two colleagues: male born on February 14, 1985 and female born on November 8, 1992"
+- "How well would these two people work together as colleagues? Male born 1988-06-10 and female born 1990-09-03, colleagues analysis"
+
+### Relationship Analysis (Family)
+- "Analyze the family relationship compatibility between a male born on December 25, 1960 and a female born on April 18, 1965"
+- "What's the family dynamic between these two? Male born 19601225 and female born 19650418, family analysis"
+
+### Relationship Analysis (Business)
+- "Analyze the business partnership compatibility between a male born on July 4, 1980 and a female born on October 31, 1985"
+- "How compatible are these two as business partners? Male born 1980-07-04 and female born 1985-10-31, business analysis"
+
+### Relationship Analysis (Classmates)
+- "Analyze the learning compatibility between two classmates: male born on September 1, 2005 and female born on January 15, 2006"
+- "How well would these two students work together? Male born 20050901 and female born 20060115, classmates analysis"
+
+### Group Analysis (Family)
+- "Analyze the family dynamics between these three people: male born 1960-03-15, female born 1962-07-22, and male born 1985-11-08"
+- "What's the family compatibility for a group of four: male born 19550101, female born 19580515, male born 19800808, and female born 19821212"
+
+### Group Analysis (Colleagues)
+- "Analyze the team dynamics for these four colleagues: male born 1985-01-10, female born 1987-04-22, male born 1990-06-15, and female born 1992-09-30"
+- "How well would this team work together? Group of three: male born 19900101, female born 19910515, male born 19920808, colleagues analysis"
+
+### Group Analysis (Friends)
+- "Analyze the friendship compatibility between these five friends: male born 1990-01-01, female born 1990-03-15, male born 1991-06-22, female born 1992-09-08, and male born 1993-12-14"
+- "What's the group dynamic for these three friends? Female born 19880101, male born 19890515, female born 19900808, friendship analysis"
 
 ## 💬 Contributing
 
-Contributions are welcome. Please open an issue or pull request on [GitHub](https://github.com/mariodian/mayan-relationship-mcp).
+Contributions welcome. Please open an issue or pull request on [GitHub](https://github.com/mariodian/mayan-relationship-mcp).
 
 ## 📜 License
 
@@ -276,3 +208,7 @@ MIT. See [LICENSE](LICENSE).
 [Mayan Relationship MCP on GitHub](https://github.com/mariodian/mayan-relationship-mcp) · [Mario Dian on X](https://x.com/mariodian)
 
 _Zodiac data sourced from [mymayansign.com](https://mymayansign.com/mayan-sign-calculator/)._
+
+---
+
+_To self-host, build from source, or contribute, see [DEVELOPMENT.md](DEVELOPMENT.md)._
