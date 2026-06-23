@@ -100,8 +100,8 @@ mayan-relationship-mcp/
 │   ├── server.ts     # Shared MCP server factory (transport-agnostic)
 │   ├── index.ts      # Cloudflare Workers entry point (HTTP/SSE)
 │   ├── stdio.ts      # Local stdio entry point
-│   ├── client.ts     # Date parsing + HTTP fetch
-│   └── parser.ts     # HTML parsing
+│   ├── client.ts     # Date parsing / validation
+│   ├── tzolkin.ts    # Tzolk'in calculation (GMT correlation)
 ├── mcp.json          # Sample Claude Desktop config
 ├── package.json
 ├── tsconfig.json
@@ -112,5 +112,5 @@ mayan-relationship-mcp/
 ## Security
 
 - **Tool-call approval**: most MCP clients ask you to manually accept each tool call before they run. Keep this setting enabled and review tool-call details before executing.
-- **No sensitive data**: this server reads public zodiac data from mymayansign.com. No secrets, tokens, or personal data are stored or transmitted.
+- **No sensitive data**: this server computes public Mayan zodiac data locally. No secrets, tokens, or personal data are stored or transmitted.
 - **Self-hosting**: if you deploy your own instance, you control the transport and can restrict access as needed.

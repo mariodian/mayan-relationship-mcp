@@ -1,7 +1,7 @@
 import { createRequire } from "module";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { fetchMayanSign } from "./client";
+import { calculateMayanSignFromBirthday } from "./tzolkin";
 
 const require = createRequire(import.meta.url);
 const pkg = require("../package.json") as { name: string; version: string };
@@ -52,9 +52,9 @@ ${typeLens}
 
 ${members.map((m) => {
   return `**${m.label}** (born ${m.birthday})
-- **Day Sign:** ${m.sign.day_sign}
-- **Galactic Tone:** ${m.sign.tone}
-- **Trecana Sign:** ${m.sign.trecana_sign}`;
+- **Day Sign:** ${m.sign.daySign.english} (${m.sign.daySign.yucatec} / ${m.sign.daySign.kiche})
+- **Galactic Tone:** ${m.sign.tone.number} (${m.sign.tone.english} / ${m.sign.tone.name})
+- **Trecana Sign:** ${m.sign.trecena.english} (${m.sign.trecena.yucatec} / ${m.sign.trecena.kiche}), position ${m.sign.trecena.position}`;
 }).join("\n\n")}
 
 ## Required Analysis Sections
@@ -108,20 +108,12 @@ export function createServer(): McpServer {
     },
     async ({ birthday }) => {
       try {
-        const sign = await fetchMayanSign(birthday);
+        const sign = calculateMayanSignFromBirthday(birthday);
         return {
           content: [
             {
               type: "text" as const,
-              text: JSON.stringify(
-                {
-                  day_sign: sign.day_sign,
-                  galactic_tone: sign.tone,
-                  trecana_sign: sign.trecana_sign,
-                },
-                null,
-                2
-              ),
+              text: JSON.stringify(sign, null, 2),
             },
           ],
         };
@@ -152,8 +144,8 @@ export function createServer(): McpServer {
     },
     async ({ birthday1, gender1, birthday2, gender2, analysis_type }) => {
       try {
-        const sign1 = await fetchMayanSign(birthday1);
-        const sign2 = await fetchMayanSign(birthday2);
+        const sign1 = calculateMayanSignFromBirthday(birthday1);
+        const sign2 = calculateMayanSignFromBirthday(birthday2);
 
         const members = [
           { label: formatGender(gender1), birthday: birthday1, sign: sign1 },
@@ -194,9 +186,7 @@ export function createServer(): McpServer {
     },
     async ({ people, analysis_type }) => {
       try {
-        const signs = await Promise.all(
-          people.map((p) => fetchMayanSign(p.birthday))
-        );
+        const signs = people.map((p) => calculateMayanSignFromBirthday(p.birthday));
 
         const members = people.map((p, i) => ({
           label: `${formatGender(p.gender)} #${i + 1}`,

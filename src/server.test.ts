@@ -61,15 +61,15 @@ describe("getTypeLens", () => {
 
 describe("buildRelationshipPrompt", () => {
   const mockSign = {
-    day_sign: "Dog",
-    tone: "12",
-    trecana_sign: "Storm",
+    daySign: { index: 7, yucatec: "Manik", kiche: "Kej", english: "Deer" },
+    tone: { number: 13, name: "Oxlajuj", english: "Cosmic" },
+    trecena: { index: 15, yucatec: "Men", kiche: "Tz'ikin", english: "Eagle", position: 13 },
   };
 
   const mockSign2 = {
-    day_sign: "Eagle",
-    tone: "6",
-    trecana_sign: "Dog",
+    daySign: { index: 15, yucatec: "Men", kiche: "Tz'ikin", english: "Eagle" },
+    tone: { number: 6, name: "Waqib'", english: "Rhythmic" },
+    trecena: { index: 10, yucatec: "Ok", kiche: "Tz'i'", english: "Dog", position: 6 },
   };
 
   it("builds relationship prompt with correct structure", () => {
@@ -85,10 +85,10 @@ describe("buildRelationshipPrompt", () => {
     expect(prompt).toContain("romantic compatibility reading");
     expect(prompt).toContain("**Male** (born 19900101)");
     expect(prompt).toContain("**Female** (born 19920515)");
-    expect(prompt).toContain("**Day Sign:** Dog");
-    expect(prompt).toContain("**Galactic Tone:** 12");
-    expect(prompt).toContain("**Trecana Sign:** Storm");
-    expect(prompt).toContain("**Day Sign:** Eagle");
+    expect(prompt).toContain("**Day Sign:** Deer (Manik / Kej)");
+    expect(prompt).toContain("**Galactic Tone:** 13 (Cosmic / Oxlajuj)");
+    expect(prompt).toContain("**Trecana Sign:** Eagle (Men / Tz'ikin), position 13");
+    expect(prompt).toContain("**Day Sign:** Eagle (Men / Tz'ikin)");
     expect(prompt).toContain("### **Individual Profiles**");
     expect(prompt).toContain("### **Compatibility Overview**");
     expect(prompt).toContain("### **Summary**");

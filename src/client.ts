@@ -1,10 +1,3 @@
-import { parseMayanSign, type MayanSign } from "./parser";
-
-const URL = "https://mymayansign.com/mayan-sign-calculator/";
-const USER_AGENT =
-  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) " +
-  "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
-
 const MONTHS: Record<string, number> = {
   january: 1, jan: 1,
   february: 2, feb: 2,
@@ -83,23 +76,4 @@ export function validateBirthday(birthday: string): string {
   );
 }
 
-export async function fetchMayanSign(birthday: string): Promise<MayanSign> {
-  const formatted = validateBirthday(birthday);
 
-  const response = await fetch(URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      "User-Agent": USER_AGENT,
-    },
-    body: new URLSearchParams({ your_birthday: formatted }).toString(),
-    signal: AbortSignal.timeout(30000),
-  });
-
-  if (!response.ok) {
-    throw new Error(`HTTP error: ${response.status} ${response.statusText}`);
-  }
-
-  const html = await response.text();
-  return parseMayanSign(html);
-}
