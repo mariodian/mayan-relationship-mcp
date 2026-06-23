@@ -63,13 +63,25 @@ describe("buildRelationshipPrompt", () => {
   const mockSign = {
     daySign: { index: 7, yucatec: "Manik", kiche: "Kej", english: "Deer" },
     tone: { number: 13, name: "Oxlajuj", english: "Cosmic" },
-    trecena: { index: 15, yucatec: "Men", kiche: "Tz'ikin", english: "Eagle", position: 13 },
+    trecena: {
+      index: 15,
+      yucatec: "Men",
+      kiche: "Tz'ikin",
+      english: "Eagle",
+      position: 13,
+    },
   };
 
   const mockSign2 = {
     daySign: { index: 15, yucatec: "Men", kiche: "Tz'ikin", english: "Eagle" },
     tone: { number: 6, name: "Waqib'", english: "Rhythmic" },
-    trecena: { index: 10, yucatec: "Ok", kiche: "Tz'i'", english: "Dog", position: 6 },
+    trecena: {
+      index: 10,
+      yucatec: "Ok",
+      kiche: "Tz'i'",
+      english: "Dog",
+      position: 6,
+    },
   };
 
   it("builds relationship prompt with correct structure", () => {
@@ -80,14 +92,18 @@ describe("buildRelationshipPrompt", () => {
 
     const prompt = buildRelationshipPrompt("romantic", members, false);
 
-    expect(prompt).toContain("# Mayan Zodiac Relationship Compatibility Analysis");
+    expect(prompt).toContain(
+      "# Mayan Zodiac Relationship Compatibility Analysis",
+    );
     expect(prompt).toContain("**Analysis Type:** Romantic");
     expect(prompt).toContain("romantic compatibility reading");
     expect(prompt).toContain("**Male** (born 19900101)");
     expect(prompt).toContain("**Female** (born 19920515)");
     expect(prompt).toContain("**Day Sign:** Deer (Manik / Kej)");
     expect(prompt).toContain("**Galactic Tone:** 13 (Cosmic / Oxlajuj)");
-    expect(prompt).toContain("**Trecana Sign:** Eagle (Men / Tz'ikin), position 13");
+    expect(prompt).toContain(
+      "**Trecana Sign:** Eagle (Men / Tz'ikin), position 13",
+    );
     expect(prompt).toContain("**Day Sign:** Eagle (Men / Tz'ikin)");
     expect(prompt).toContain("### **Individual Profiles**");
     expect(prompt).toContain("### **Compatibility Overview**");
@@ -139,9 +155,17 @@ describe("buildRelationshipPrompt", () => {
     expect(romanticPrompt).toContain("romantic compatibility reading");
 
     const businessPrompt = buildRelationshipPrompt("business", members, false);
-    expect(businessPrompt).toContain("business partnership compatibility reading");
+    expect(businessPrompt).toContain(
+      "business partnership compatibility reading",
+    );
 
-    const classmatesPrompt = buildRelationshipPrompt("classmates", members, false);
-    expect(classmatesPrompt).toContain("classmates/learning compatibility reading");
+    const classmatesPrompt = buildRelationshipPrompt(
+      "classmates",
+      members,
+      false,
+    );
+    expect(classmatesPrompt).toContain(
+      "classmates/learning compatibility reading",
+    );
   });
 });
