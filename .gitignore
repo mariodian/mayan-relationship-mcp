@@ -11,6 +11,13 @@ dist/
 .env
 .env.*
 
+# Local tooling temp/state
+.githooks/
+
+# Mempalace state
+entities.json
+mempalace.yaml
+
 # IDE
 .vscode/
 .idea/
