@@ -2,7 +2,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { calculateMayanSignFromBirthday } from "./tzolkin";
 
-const PKG = { name: "mayan-relationship-mcp", version: "0.1.0" } as const;
+const PKG = { name: "mayan-relationship-mcp", version: "0.1.1" } as const;
 
 const MAX_GROUP_SIZE = 10;
 
@@ -22,13 +22,20 @@ export function formatGender(gender: string): string {
 
 export function getTypeLens(type: string): string {
   const lenses: Record<string, string> = {
-    romantic: "This is a **romantic compatibility reading**. Focus on intimacy, emotional connection, partnership dynamics, long-term relationship potential, and how these energies support or challenge each other in a committed relationship.",
-    friendship: "This is a **friendship compatibility reading**. Focus on loyalty, shared enjoyment, trust, communication style, mutual support, and how these energies complement each other as friends.",
-    colleagues: "This is a **workplace colleagues compatibility reading**. Focus on collaboration style, communication in professional settings, complementary strengths, potential workplace conflicts, and how these energies work together as team members.",
-    family: "This is a **family relationship compatibility reading**. Focus on familial bonds, inherited patterns, emotional support systems, generational dynamics, and how these energies nurture or challenge each other within a family context.",
-    business: "This is a **business partnership compatibility reading**. Focus on complementary skills, decision-making styles, risk tolerance, productivity synergy, leadership dynamics, and how these energies support or conflict in a business venture.",
-    classmates: "This is a **classmates/learning compatibility reading**. Focus on learning styles, study synergy, peer support, intellectual compatibility, motivation patterns, and how these energies help or hinder each other in educational settings.",
-    general: "This is a **general compatibility reading**. Provide a balanced overview covering all aspects of the relationship without focusing on any specific context.",
+    romantic:
+      "This is a **romantic compatibility reading**. Focus on intimacy, emotional connection, partnership dynamics, long-term relationship potential, and how these energies support or challenge each other in a committed relationship.",
+    friendship:
+      "This is a **friendship compatibility reading**. Focus on loyalty, shared enjoyment, trust, communication style, mutual support, and how these energies complement each other as friends.",
+    colleagues:
+      "This is a **workplace colleagues compatibility reading**. Focus on collaboration style, communication in professional settings, complementary strengths, potential workplace conflicts, and how these energies work together as team members.",
+    family:
+      "This is a **family relationship compatibility reading**. Focus on familial bonds, inherited patterns, emotional support systems, generational dynamics, and how these energies nurture or challenge each other within a family context.",
+    business:
+      "This is a **business partnership compatibility reading**. Focus on complementary skills, decision-making styles, risk tolerance, productivity synergy, leadership dynamics, and how these energies support or conflict in a business venture.",
+    classmates:
+      "This is a **classmates/learning compatibility reading**. Focus on learning styles, study synergy, peer support, intellectual compatibility, motivation patterns, and how these energies help or hinder each other in educational settings.",
+    general:
+      "This is a **general compatibility reading**. Provide a balanced overview covering all aspects of the relationship without focusing on any specific context.",
   };
   return lenses[type] || lenses.general;
 }
@@ -36,10 +43,10 @@ export function getTypeLens(type: string): string {
 export function buildRelationshipPrompt(
   type: string,
   members: Array<{ label: string; birthday: string; sign: any }>,
-  isGroup: boolean = false
+  isGroup: boolean = false,
 ): string {
   const typeLens = getTypeLens(type);
-  
+
   let prompt = `# Mayan Zodiac ${isGroup ? "Group" : "Relationship"} Compatibility Analysis
 
 **Analysis Type:** ${type.charAt(0).toUpperCase() + type.slice(1)}
@@ -48,12 +55,14 @@ ${typeLens}
 
 ## Participants
 
-${members.map((m) => {
-  return `**${m.label}** (born ${m.birthday})
+${members
+  .map((m) => {
+    return `**${m.label}** (born ${m.birthday})
 - **Day Sign:** ${m.sign.daySign.english} (${m.sign.daySign.yucatec} / ${m.sign.daySign.kiche})
 - **Galactic Tone:** ${m.sign.tone.number} (${m.sign.tone.english} / ${m.sign.tone.name})
 - **Trecana Sign:** ${m.sign.trecena.english} (${m.sign.trecena.yucatec} / ${m.sign.trecena.kiche}), position ${m.sign.trecena.position}`;
-}).join("\n\n")}
+  })
+  .join("\n\n")}
 
 ## Required Analysis Sections
 
@@ -125,13 +134,14 @@ export function createServer(): McpServer {
           ],
         };
       }
-    }
+    },
   );
 
   server.registerTool(
     "analyze_relationship",
     {
-      description: "Analyze the Mayan zodiac relationship compatibility between two people. Fetches both Mayan signs and returns a complete analysis prompt that the LLM uses to generate the relationship reading. Supports different relationship contexts (romantic, friendship, colleagues, family, business, classmates, general).",
+      description:
+        "Analyze the Mayan zodiac relationship compatibility between two people. Fetches both Mayan signs and returns a complete analysis prompt that the LLM uses to generate the relationship reading. Supports different relationship contexts (romantic, friendship, colleagues, family, business, classmates, general).",
       inputSchema: {
         birthday1: z.string(),
         gender1: z.enum(["male", "female"]),
@@ -165,26 +175,32 @@ export function createServer(): McpServer {
           ],
         };
       }
-    }
+    },
   );
 
   server.registerTool(
     "analyze_group",
     {
-      description: "Analyze the Mayan zodiac relationship compatibility within a group of 3 to 10 people. Fetches all Mayan signs and returns a complete analysis prompt for group dynamics. Supports different group contexts (romantic, friendship, colleagues, family, business, classmates, general).",
+      description:
+        "Analyze the Mayan zodiac relationship compatibility within a group of 3 to 10 people. Fetches all Mayan signs and returns a complete analysis prompt for group dynamics. Supports different group contexts (romantic, friendship, colleagues, family, business, classmates, general).",
       inputSchema: {
-        people: z.array(
-          z.object({
-            birthday: z.string(),
-            gender: z.enum(["male", "female"]),
-          })
-        ).min(3).max(MAX_GROUP_SIZE),
+        people: z
+          .array(
+            z.object({
+              birthday: z.string(),
+              gender: z.enum(["male", "female"]),
+            }),
+          )
+          .min(3)
+          .max(MAX_GROUP_SIZE),
         analysis_type: z.enum(analysisTypes).optional().default("family"),
       },
     },
     async ({ people, analysis_type }) => {
       try {
-        const signs = people.map((p) => calculateMayanSignFromBirthday(p.birthday));
+        const signs = people.map((p) =>
+          calculateMayanSignFromBirthday(p.birthday),
+        );
 
         const members = people.map((p, i) => ({
           label: `${formatGender(p.gender)} #${i + 1}`,
@@ -207,7 +223,7 @@ export function createServer(): McpServer {
           ],
         };
       }
-    }
+    },
   );
 
   return server;
