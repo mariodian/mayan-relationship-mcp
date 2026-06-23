@@ -14,6 +14,7 @@
     "check": "bun run format:check && tsc --noEmit && bun run test",
     "format": "bunx prettier --write '**/*.{ts,css,html}'",
     "format:check": "bunx prettier --check '**/*.{ts,css,html}'",
+    "typecheck": "tsc --noEmit",
     "test": "bun test"
   },
   "dependencies": {
