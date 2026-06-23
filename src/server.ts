@@ -1,10 +1,8 @@
-import { createRequire } from "module";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { calculateMayanSignFromBirthday } from "./tzolkin";
 
-const require = createRequire(import.meta.url);
-const pkg = require("../package.json") as { name: string; version: string };
+const PKG = { name: "mayan-relationship-mcp", version: "0.1.0" } as const;
 
 const MAX_GROUP_SIZE = 10;
 
@@ -96,8 +94,8 @@ A concise 2-3 sentence takeaway that captures the essence of this compatibility.
 
 export function createServer(): McpServer {
   const server = new McpServer({
-    name: pkg.name,
-    version: pkg.version,
+    name: PKG.name,
+    version: PKG.version,
   });
 
   server.registerTool(
